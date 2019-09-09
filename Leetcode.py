@@ -69,6 +69,45 @@ class BinaryTreeZigzagLevelOrderTraversal:
             height += 1
         return res
 
+class CourseSchedule:
+    #Topological Sort
+    def canFinish(self, numCourses: int, edges: List[List[int]]) -> bool:   
+        vertices = {x:[] for x in range(numCourses)}
+        indegrees = {x:0 for x in range(numCourses)}
+        for edge in edges:
+            vertices[edge[0]].append(edge[1])
+            indegrees[edge[1]] += 1
+        while vertices and edges:
+            root = min(indegrees, key=indegrees.get)
+            if indegrees[root]:
+                return False
+            for child in vertices[root]:
+                indegrees[child] -= 1
+            vertices.pop(root)
+            indegrees.pop(root)
+        return True
+
+class CourseScheduleII:
+    def findOrder(self, numCourses: int, edges: List[List[int]]) -> List[int]:
+        if not edges:
+            return [x for x in range(numCourses)]
+        vertices = {x:[] for x in range(numCourses)}
+        indegrees = {x:0 for x in range(numCourses)}
+        res = []
+        for edge in edges:
+            vertices[edge[0]].append(edge[1])
+            indegrees[edge[1]] += 1
+        while vertices and edges:
+            root = min(indegrees, key=indegrees.get)
+            if indegrees[root]:
+                return []
+            for child in vertices[root]:
+                indegrees[child] -= 1
+            res.append(root)
+            vertices.pop(root)
+            indegrees.pop(root)
+        return res[::-1]
+
 class ClimbingStairs:
     def climbStairs(self, n: int) -> int:
         if n == 1:
@@ -116,6 +155,10 @@ class ExcelSheetColumnNumber:
         for i in range(len(s)):
             res = res*26 + ord(s[i])-64
         return res
+
+class FactorialTrailingZeroes:
+    def trailingZeroes(self, n: int) -> int:
+        return 0 if n == 0 else n // 5 + self.trailingZeroes(n // 5)
 
 class FindtheDuplicateNumber:
     def findDuplicate(self, nums: List[int]) -> int:
